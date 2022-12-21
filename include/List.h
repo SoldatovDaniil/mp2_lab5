@@ -101,6 +101,11 @@ public:
 		root = nullptr;
 	}
 
+	List(Node* first)
+	{
+		root = first;
+	}
+
 	List(int size)
 	{
 		root = new Node(0);
@@ -131,10 +136,6 @@ public:
 
 	List& operator=(const List& list)
 	{
-		if (this == list)
-		{
-			return *this;
-		}
 		root = new Node(list.root->elem);
 		Node* tmp1 = root;
 		Node* tmp2 = list.root;
@@ -144,6 +145,7 @@ public:
 			tmp1 = tmp1->next;
 			tmp2 = tmp2->next;
 		}
+		return *this;
 	}
 
 	bool empty() const
@@ -185,35 +187,152 @@ public:
 		}
 	}
 
-	void merge(const List& list)
+	List separator()
 	{
-		if (getSize() + list.getSize() == 0)
+		Node* tmp1 = root;
+		Node* tmp2 = root;
+		if (tmp1->next == nullptr)
+		{
+			List<T> res1;
+			return res1;
+		}
+		if (tmp1->next->next == nullptr)
+		{
+			tmp1 = tmp1->next;
+			root->next = nullptr;
+			List<T> res2(tmp1);
+			return res2;
+		}
+		while (tmp1->next != nullptr && tmp1->next->next != nullptr)
+		{
+			tmp1 = tmp1->next->next;
+			tmp2 = tmp2->next;
+		}
+		Node* res = tmp2->next;
+		tmp2->next = nullptr;
+		List<T> res3(res);
+		return res3;
+	}
+
+	List merge(const List& list)
+	{
+		List<T> res;
+		Node* tmp1 = root;
+		Node* tmp2 = list.root;
+		while (tmp1 != nullptr && tmp2 != nullptr)
+		{
+			if (tmp1->elem >= tmp2->elem)
+			{
+				res.push_back(tmp2->elem);
+				tmp2 = tmp2->next;
+			}
+			else
+			{
+				res.push_back(tmp1->elem);
+				tmp1 = tmp1->next;
+			}
+		}
+		if (tmp1 == nullptr)
+		{
+			while (tmp2 != nullptr)
+			{
+				res.push_back(tmp2->elem);
+				tmp2 = tmp2->next;
+			}
+		}
+		else if (tmp2 == nullptr)
+		{
+			while (tmp1 != nullptr)
+			{
+				res.push_back(tmp1->elem);
+				tmp1 = tmp1->next;
+			}
+		}
+		return res;
+	}
+
+	void mergeSort()
+	{
+		if (root->next != nullptr)
+		{
+			List<T> hlist = separator();
+			mergeSort();
+			hlist.mergeSort();
+			*this = merge(hlist); 
+		}
+	}
+
+	bool check()
+	{
+		iterator iter = begin();
+		T tmp = *iter;
+		iter++;
+		while (iter != end())
+		{
+			if (tmp > *iter)
+			{
+				return false;
+			}
+			tmp = *iter;
+			iter++;
+		}
+		return true;
+	}
+
+	Node* findMiddle()
+	{
+		Node* tmp1 = root;
+		Node* tmp2 = root;
+		if (getSize() % 2 == 0)
+		{
+			tmp2 = tmp2->next->next;
+		}
+		else
+		{
+			tmp2 = tmp2->next;
+		}
+		while (tmp2)
+		{
+			tmp1 = tmp1->next;
+			if (tmp2->next)
+			{
+				tmp2 = tmp2->next->next;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return tmp1;
+	}
+
+	void delMiddle()
+	{
+		if (root == nullptr || root->next == nullptr)
 		{
 			return;
 		}
-		Node* res = new Node(root->elem);
-		Node* tmp = res;
-		Node* tmp2 = root->next;
-		iterator iter = begin();
-		for (++iter; iter != end(); ++iter)
+		Node* tmp1 = root;
+		Node* tmp2 = root;
+		Node* previous = nullptr;
+		if (getSize() % 2 == 0)
 		{
-			tmp->next = new Node(tmp2->elem);
-			tmp = tmp->next;
 			tmp2 = tmp2->next;
 		}
-		tmp2 = list.root;
-		for (iterator it = list.begin(); it != list.end(); ++it)
+		while (tmp2 != nullptr && tmp2->next != nullptr)
 		{
-			tmp->next = new Node(tmp2->elem);
-			tmp = tmp->next;
-			tmp2 = tmp2->next;
+			tmp2 = tmp2->next->next;
+			previous = tmp1;
+			tmp1 = tmp1->next;
 		}
-		root = res;
-	}
-
-	List mergeSort()
-	{
-
+		if (getSize() % 2 == 1)
+		{
+			previous->next = tmp1->next;
+		}
+		else
+		{
+			previous->next = tmp1->next->next;
+		}
 	}
 
 	iterator begin()

@@ -164,3 +164,92 @@ TEST(List, can_check_empty)
 	EXPECT_EQ(true, l1.empty());
 }
 
+TEST(List, can_clear)
+{
+	List<int> l1(4);
+	l1.push_front(1);
+	l1.push_front(2);
+	l1.push_front(3);
+	l1.clear();
+	EXPECT_EQ(true, l1.empty());
+}
+
+TEST(List, can_check_true)
+{
+	List<int> l1;
+	l1.push_front(5);
+	l1.push_front(4);
+	l1.push_front(3);
+	l1.push_front(2);
+	l1.push_front(1);
+	EXPECT_EQ(true, l1.check());
+}
+
+TEST(List, can_check_false)
+{
+	List<int> l1;
+	l1.push_front(5);
+	l1.push_front(4);
+	l1.push_front(3);
+	l1.push_front(2);
+	l1.push_front(1);
+	l1.push_front(6);
+	EXPECT_EQ(false, l1.check());
+}
+
+TEST(List, can_merge_sort)
+{
+	List<int> l1;
+	l1.push_front(65);
+	l1.push_front(4);
+	l1.push_front(12);
+	l1.push_front(1);
+	l1.push_front(45);
+	l1.push_front(0);
+	l1.mergeSort();
+	EXPECT_EQ(true, l1.check());
+}
+
+TEST(List, can_find_middle_1)
+{
+	List<int> l1;
+	l1.push_back(1);
+	l1.push_back(2);
+	l1.push_back(3);
+	l1.push_back(4);
+	l1.push_back(5);
+	l1.push_back(6);
+	l1.push_back(7);
+	l1.push_back(8);
+	l1.push_back(9);
+	EXPECT_EQ(5, (l1.findMiddle()->elem));
+}
+
+TEST(List, can_find_middle_0)
+{
+	List<int> l1;
+	l1.push_back(1);
+	l1.push_back(2);
+	l1.push_back(3);
+	l1.push_back(4);
+	l1.push_back(5);
+	l1.push_back(6);
+	l1.push_back(7);
+	l1.push_back(8);
+	EXPECT_EQ(4, (l1.findMiddle()->elem));
+}
+
+TEST(List, can_delete_middle_elements)
+{
+	List<int> l1;
+	l1.push_back(1);
+	l1.push_back(2);
+	l1.push_back(3);
+	l1.push_back(4);
+	l1.push_back(5);
+	l1.push_back(6);
+	l1.push_back(7);
+	l1.push_back(8);
+	l1.delMiddle();
+	EXPECT_EQ(6, ((l1.findMiddle()->next)->elem));
+}
