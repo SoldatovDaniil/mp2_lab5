@@ -315,23 +315,23 @@ public:
 		Node* tmp1 = root;
 		Node* tmp2 = root;
 		Node* previous = nullptr;
-		if (getSize() % 2 == 0)
-		{
-			tmp2 = tmp2->next;
-		}
+		Node* prePrevious = nullptr;
+		int size = 0;
 		while (tmp2 != nullptr && tmp2->next != nullptr)
 		{
+			++size;
 			tmp2 = tmp2->next->next;
+			prePrevious = previous;
 			previous = tmp1;
 			tmp1 = tmp1->next;
 		}
-		if (getSize() % 2 == 1)
+		if (size % 2 == 1)
 		{
 			previous->next = tmp1->next;
 		}
 		else
 		{
-			previous->next = tmp1->next->next;
+			prePrevious->next = tmp1->next;
 		}
 	}
 

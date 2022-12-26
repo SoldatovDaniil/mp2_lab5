@@ -250,6 +250,8 @@ TEST(List, can_delete_middle_elements)
 	l1.push_back(6);
 	l1.push_back(7);
 	l1.push_back(8);
+	l1.print();
 	l1.delMiddle();
+	l1.print();
 	EXPECT_EQ(6, ((l1.findMiddle()->next)->elem));
 }
